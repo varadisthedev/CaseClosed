@@ -43,10 +43,20 @@ run_migrations() {
     alembic -c /app/alembic.ini upgrade head
 }
 
+seed_cases() {
+    echo "[entrypoint] Seeding case pack..."
+    python -m scripts.seed_case_pack
+}
+
 case "${1:-serve}" in
     migrate)
         wait_for_db
         run_migrations
+        ;;
+    seed)
+        wait_for_db
+        run_migrations
+        seed_cases
         ;;
     test)
         wait_for_db
