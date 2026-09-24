@@ -26,3 +26,7 @@ venv/
 .opencode/DONE
 apps/api/app/ml/artifacts/*
 !apps/api/app/ml/artifacts/.gitkeep
+opencode_autopilot.sh
+PROMPT_FASTAPI_BACKEND.md
+.opencode/*
+.opencode/PROGRESS.md

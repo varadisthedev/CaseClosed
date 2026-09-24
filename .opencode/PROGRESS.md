@@ -16,8 +16,8 @@ See `apps/api/docs/DECISIONS.md`.
 - [x] 7. Risk service, RAG service with fixtures, investigation service
 - [x] 8. LangGraph agent (nodes, state, prompts, loop limit) running end to end on placeholders
 - [x] 9. All routes wired, error handling, CORS, optional API-key check
-- [ ] 10. Full test suite green, end-to-end smoke flow, `README.md`, `PLACEHOLDERS.md`, `.env.example`
-- [ ] 11. Final review against AGENTS.md sections 12, 13, 16 to 21 and 24 to 26; fix any deviation
+- [x] 10. Full test suite green, end-to-end smoke flow, `README.md`, `PLACEHOLDERS.md`, `.env.example`
+- [x] 11. Final review against AGENTS.md sections 12, 13, 16 to 21 and 24 to 26; fix any deviation
 
 ## Notes
 - Pre-existing (committed earlier): layered dir scaffold, async SQLAlchemy models + Alembic (Postgres), docker setup, case-pack seed.
