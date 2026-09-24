@@ -13,9 +13,9 @@ See `apps/api/docs/DECISIONS.md`.
 - [x] 4. Evidence service, `as_of` helpers with leak guards + tests
 - [x] 5. Policy engine with versioned rules and audit logging
 - [x] 6. Mock actions with idempotency, approval flow
-- [ ] 7. Risk service, RAG service with fixtures, investigation service
-- [ ] 8. LangGraph agent (nodes, state, prompts, loop limit) running end to end on placeholders
-- [ ] 9. All routes wired, error handling, CORS, optional API-key check
+- [x] 7. Risk service, RAG service with fixtures, investigation service
+- [x] 8. LangGraph agent (nodes, state, prompts, loop limit) running end to end on placeholders
+- [x] 9. All routes wired, error handling, CORS, optional API-key check
 - [ ] 10. Full test suite green, end-to-end smoke flow, `README.md`, `PLACEHOLDERS.md`, `.env.example`
 - [ ] 11. Final review against AGENTS.md sections 12, 13, 16 to 21 and 24 to 26; fix any deviation
 
@@ -29,5 +29,4 @@ See `apps/api/docs/DECISIONS.md`.
 - Phase 4 done: Evidence service with provenance tracking, `as_of` helpers with leak guards (`guard_record`, `filter_after`, `epoch_utc`), tests covering future-data rejection and evidence ID validation.
 - Phase 5 done: Policy engine with versioned rules (`POLICY_VERSION="1.0"`), 6 default rules (R-1..R-6) seeded in DB, deterministic rule matching (`_rule_applies`) supporting conditions for fraud_probability, verdict, pattern (any/eq/none), exposure, risk_score, evidence_count. State machine: RECOMMENDED -> HUMAN_APPROVAL_REQUIRED -> AUTHORIZED -> EXECUTABLE. Approval routes L1/L2/AUTO with priority resolution. Audit logging of decisions via `AuditEvent`. 8 tests passing.
 - Phase 6 done: Mock actions with idempotency and approval flow. Actions: block_card, step_up_authentication, contact_customer, file_sar, create_case. Each action uses idempotency key for deterministic repeatable results, persisted in ActionExecution. Actions EXECUTABLE only after policy approval. Approval recorded via policy_service.request_approval(). New functions: _generate_execution_id, _generate_idempotency_key, _now_utc.
-- Phase 7 in progress: Risk service, RAG service with fixtures, investigation service. Risk service provides deterministic risk assessment without LLM calls. RAG service provides entity resolution, graph evidence retrieval, similar case lookup, and grounded context building for LLM explanation with provenance preservation and evidence ID validation. Investigation service coordinates the full workflow: policy evaluation, risk assessment, evidence retrieval, similar case lookup, and context building.
-- Phase 6 in progress: Mock actions (block card, step-up authentication, contact customer, file SAR, create case) with idempotency keys, persisted results, and approval flow. Actions can only execute when policy state is EXECUTABLE. Approval must be recorded before execution when required.
+- Phase 7 done: Risk service, RAG service with fixtures, investigation service. Risk service provides deterministic risk assessment without LLM calls (assess_risk, get_risk_factors, investigate_case). RAG service provides entity resolution (resolve_entities), graph evidence retrieval (retrieve_graph_evidence), similar case lookup (retrieve_similar_cases), and grounded context building (build_grounded_context) with provenance preservation and evidence ID validation (validate_evidence_ids). Investigation service coordinates the full workflow (run_investigation, _evaluate_policy, check_approval_required). All services use placeholder-first pattern with source="service.stub" markers.
