@@ -10,7 +10,7 @@ See `apps/api/docs/DECISIONS.md`.
 - [x] 1. Scaffold `apps/api/` structure, `requirements.txt`, config, logging, app factory, `/health`, test harness
 - [x] 2. Schemas (case, evidence, risk, action) and DB models, session, repositories
 - [x] 3. Integration Protocols plus placeholder implementations (graph, MCP skeleton, LLM, vector store) and ML wrapper with stub fallback
-- [ ] 4. Evidence service, `as_of` helper, provenance rules
+- [x] 4. Evidence service, `as_of` helpers with leak guards + tests
 - [ ] 5. Policy engine with versioned rules and audit logging
 - [ ] 6. Mock actions with idempotency, approval flow
 - [ ] 7. Risk service, RAG service with fixtures, investigation service
