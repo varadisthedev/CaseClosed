@@ -1,21 +1,28 @@
-from sqlalchemy import Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.postgresql import JSONB
+from datetime import datetime
+
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    JSON,
+    String,
+    Text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.enums import EvidenceRequestStatus, EvidenceRequestType, EvidenceSource
-from app.db.models.base import Base, TimestampMixin
-
-
-def _pg_enum(enum_cls, name: str) -> Enum:
-    return Enum(
-        enum_cls,
-        name=name,
-        values_callable=lambda e: [m.value for m in e],
-        native_enum=True,
-    )
+from app.db.models.base import Base, TimestampMixin, portable_enum
 
 
 class Evidence(Base, TimestampMixin):
+    """A single piece of investigation evidence with provenance.
+
+    ``source`` distinguishes real sources (``tigergraph``, ``ml_model``,
+    ``llm``, ``document``, ``customer``, ``external``) from ``placeholder``.
+    """
+
     __tablename__ = "evidence"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -23,12 +30,17 @@ class Evidence(Base, TimestampMixin):
     case_id: Mapped[str] = mapped_column(
         String(32), ForeignKey("cases.case_id", ondelete="CASCADE"), index=True
     )
+    type: Mapped[str] = mapped_column(String(48), default="graph")
     claim: Mapped[str] = mapped_column(Text)
-    source: Mapped[EvidenceSource] = mapped_column(
-        _pg_enum(EvidenceSource, "evidence_source")
+    source: Mapped[str] = mapped_column(String(32), default="placeholder")
+    source_ref: Mapped[str] = mapped_column(String(255), default="")
+    confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
+    entity_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    payload: Mapped[dict] = mapped_column(JSON, default=dict)
+    as_of: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
     )
-    ref: Mapped[str] = mapped_column(String(255), default="")
-    entity_ids: Mapped[list[str]] = mapped_column(JSONB, default=list)
+    provisional: Mapped[bool] = mapped_column(Boolean, default=True)
 
     case: Mapped["Case"] = relationship(back_populates="evidence")
 
@@ -42,12 +54,12 @@ class EvidenceRequest(Base, TimestampMixin):
         String(32), ForeignKey("cases.case_id", ondelete="CASCADE"), index=True
     )
     type: Mapped[EvidenceRequestType] = mapped_column(
-        _pg_enum(EvidenceRequestType, "evidence_request_type")
+        portable_enum(EvidenceRequestType, "evidence_request_type")
     )
     asked_after_step: Mapped[int] = mapped_column(Integer, default=0)
     assumed_response: Mapped[str] = mapped_column(Text, default="")
     status: Mapped[EvidenceRequestStatus] = mapped_column(
-        _pg_enum(EvidenceRequestStatus, "evidence_request_status"),
+        portable_enum(EvidenceRequestStatus, "evidence_request_status"),
         default=EvidenceRequestStatus.PENDING,
     )
 

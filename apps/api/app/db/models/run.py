@@ -2,27 +2,17 @@ from datetime import datetime
 
 from sqlalchemy import (
     DateTime,
-    Enum,
     Float,
     ForeignKey,
     Integer,
+    JSON,
     String,
     Text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.enums import RunStatus
-from app.db.models.base import Base, TimestampMixin
-
-
-def _pg_enum(enum_cls, name: str) -> Enum:
-    return Enum(
-        enum_cls,
-        name=name,
-        values_callable=lambda e: [m.value for m in e],
-        native_enum=True,
-    )
+from app.db.models.base import Base, TimestampMixin, portable_enum
 
 
 class InvestigationRun(Base, TimestampMixin):
@@ -34,7 +24,7 @@ class InvestigationRun(Base, TimestampMixin):
         String(32), ForeignKey("cases.case_id", ondelete="CASCADE"), index=True
     )
     status: Mapped[RunStatus] = mapped_column(
-        _pg_enum(RunStatus, "run_status"), default=RunStatus.PENDING
+        portable_enum(RunStatus, "run_status"), default=RunStatus.PENDING
     )
     stop_reason: Mapped[str] = mapped_column(Text, default="")
     tool_calls: Mapped[int] = mapped_column(Integer, default=0)
@@ -59,10 +49,12 @@ class InvestigationStep(Base, TimestampMixin):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     run_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("investigation_runs.run_id", ondelete="CASCADE"), index=True
+        String(64),
+        ForeignKey("investigation_runs.run_id", ondelete="CASCADE"),
+        index=True,
     )
     step_index: Mapped[int] = mapped_column(Integer, default=0)
     node_name: Mapped[str] = mapped_column(String(64), default="")
-    payload: Mapped[dict] = mapped_column(JSONB, default=dict)
+    payload: Mapped[dict] = mapped_column(JSON, default=dict)
 
     run: Mapped["InvestigationRun"] = relationship(back_populates="steps")

@@ -16,3 +16,13 @@ venv/
 .vscode/
 .DS_Store
 /docs
+
+# Task-specific (PROMPT_FASTAPI_BACKEND.md section 4a)
+.env.*
+!.env.example
+*.sqlite
+*.db
+.opencode/*.log
+.opencode/DONE
+apps/api/app/ml/artifacts/*
+!apps/api/app/ml/artifacts/.gitkeep
