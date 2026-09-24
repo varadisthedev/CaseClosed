@@ -1,0 +1,27 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Dev / editor
+.git/
+.gitignore
+.idea/
+.vscode/
+*.log
+*.md
+Makefile
