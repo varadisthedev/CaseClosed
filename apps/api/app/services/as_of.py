@@ -5,6 +5,16 @@ class AsOfError(ValueError):
     """Raised when data observed after the investigation timestamp is used."""
 
 
+def epoch_utc(value: datetime) -> float:
+    """UTC epoch used for as_of comparisons (naive == UTC). See ``_epoch``."""
+    return _epoch(value)
+
+
+def epoch_utc(value: datetime) -> float:
+    """UTC epoch (naive == UTC) used by policy as_of comparisons."""
+    return _epoch(value)
+
+
 def _epoch(value: datetime) -> float:
     """UTC epoch for order comparisons.
 

@@ -125,6 +125,7 @@ class PolicyRule(Base, TimestampMixin):
     route: Mapped[ApprovalRoute | None] = mapped_column(
         portable_enum(ApprovalRoute, "approval_route"), nullable=True
     )
+    approval_required: Mapped[bool] = mapped_column(Boolean, default=False)
     active: Mapped[bool] = mapped_column(Boolean, default=True)
 
 

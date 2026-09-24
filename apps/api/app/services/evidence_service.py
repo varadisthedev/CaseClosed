@@ -159,6 +159,12 @@ def new_event_id() -> str:
     return f"AU-{uuid.uuid4().hex[:12]}"
 
 
+def new_approval_id(case_id: str) -> str:
+    import uuid
+
+    return f"AP-{case_id}-{uuid.uuid4().hex[:8]}"
+
+
 def current_as_of() -> datetime:
     from datetime import timezone
 

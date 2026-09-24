@@ -9,6 +9,7 @@ from app.core.enums import ActionState, ActionType, ApprovalRoute
 class ActionRecommendation(BaseModel):
     """The agent's proposed next-best action before policy evaluation."""
 
+    request_id: str = ""
     phase: str
     action: ActionType
     route: ApprovalRoute | None = None
